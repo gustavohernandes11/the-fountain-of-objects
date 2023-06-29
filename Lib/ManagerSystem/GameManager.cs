@@ -29,6 +29,7 @@ class GameManager
         while (ShouldGameStillRun)
         {
             Message.Divisor();
+            Current.DisplayBoard(PlayerPosition);
             DisplayPlayerPosition();
             Command command = Helper.GetPrompt("What do you want to do?");
             HandlePromptCommand(command);
@@ -104,7 +105,8 @@ class GameManager
 
     private void VerifyGameState()
     {
-        if (ShouldGameStillRun == false) {
+        if (ShouldGameStillRun == false)
+        {
             return;
         }
         if (PlayerPosition == new Point(0, 0) && IsEnabledFountain)
@@ -125,10 +127,7 @@ class GameManager
     {
         Message.Display($"You are in the room at (Row={PlayerPosition.X}, Column={PlayerPosition.Y}).", MessageType.Descritive);
     }
-    private void DisplayHelp()
-    {
-        Message.Display($"Deus ajuda quem cedo madruga.", MessageType.Descritive);
-    }
+
 }
 
 

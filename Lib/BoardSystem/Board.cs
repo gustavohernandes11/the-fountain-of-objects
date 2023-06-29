@@ -23,18 +23,34 @@ public class Board
 
     }
 
-    public void DisplayBoard()
+    public void DisplayBoard(Point highlighted)
     {
-        foreach (var square in Content)
+        string room = "■ ";
+        string highlightedRoom = ". ";
+        string[] rows = new string[Dimension];
+
+        for (int i = 0; i < Dimension; i++)
         {
-            Console.WriteLine($"position: {square.Key}");
-            foreach (var element in square.Value)
+            for (int j = 0; j < Dimension; j++)
             {
-                Console.WriteLine(element);
+                if (highlighted.X == j && highlighted.Y == i)
+                {
+                    rows[i] += highlightedRoom;
+                }
+                else
+                {
+                    rows[i] += room;
+                }
             }
         }
+        Array.Reverse(rows);
+        foreach (var row in rows)
+        {
+            Console.WriteLine(row);
+        }
+        Console.WriteLine();
     }
-    
+
     public List<GameEntity> GetEntitiesAt(Point point)
     {
         _ = Content.TryGetValue(point, out List<GameEntity>? valueFound);

@@ -24,6 +24,7 @@ static class Helper
                 return command;
             }
 
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Invalid command.");
         }
     }
