@@ -1,2 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using BoardSystem;
+using ManagerSystem;
+
+
+Console.Clear();
+
+Board myBoard = new(4);
+GameManager gameManager = new(myBoard);
+gameManager.Init();
+
+Console.ForegroundColor = ConsoleColor.White;
+
+
+
+

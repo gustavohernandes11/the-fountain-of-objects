@@ -3,7 +3,9 @@ namespace BoardSystem;
 public class Board
 {
     int Dimension { get; set; }
+
     Dictionary<Point, List<GameEntity>> Content { get; set; }
+
     readonly List<GameEntity> emptyEntityList = new();
 
     public Board(int dimension)
@@ -18,6 +20,7 @@ public class Board
                 Content.Add(new Point(i, j), emptyEntityList);
             }
         }
+
     }
 
     public void DisplayBoard()
@@ -31,13 +34,14 @@ public class Board
             }
         }
     }
+    
     public List<GameEntity> GetEntitiesAt(Point point)
     {
         _ = Content.TryGetValue(point, out List<GameEntity>? valueFound);
         return valueFound ?? emptyEntityList;
     }
 
-    bool IsValidPoint(Point point) =>
+    public bool IsValidPoint(Point point) =>
         Content.TryGetValue(point, out _);
 
     public bool HasEntityAt(GameEntity entity, Point point) =>
@@ -67,7 +71,7 @@ public class Board
     public bool IsEmpty(Point point) =>
         IsValidPoint(point) && Content[point].Count > 0;
 
-    public void SetOrReplaceWith(GameEntity entity, Point point)
+    public void Set(GameEntity entity, Point point)
     {
         if (IsValidPoint(point)) Content[point] = new List<GameEntity>() { entity };
     }
