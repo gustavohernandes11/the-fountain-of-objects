@@ -2,15 +2,24 @@ namespace BoardSystem;
 
 public class Board
 {
+    Difficulty Difficulty { get; set; }
     int Dimension { get; set; }
 
     Dictionary<Point, List<GameEntity>> Content { get; set; }
+    readonly Dictionary<Difficulty, int> dimensions = new()
+        {
+            { Difficulty.Easy, 4 },
+            { Difficulty.Medium, 6 },
+            { Difficulty.Hard, 8 }
+        };
 
     readonly List<GameEntity> emptyEntityList = new();
 
-    public Board(int dimension)
+    public Board(Difficulty difficulty)
     {
-        Dimension = dimension;
+        Difficulty = difficulty;
+        Dimension = dimensions[Difficulty];
+
         Content = new Dictionary<Point, List<GameEntity>>();
 
         for (int i = 0; i < Dimension; i++)
