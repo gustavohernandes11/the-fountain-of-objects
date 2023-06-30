@@ -39,11 +39,20 @@ namespace MessageSystem
         {
             string helpMessage = "You have the map to locate yourself and some valid commands you can type in the prompt. The goal is to find the Fountain Of Objects, enable it, and return to the exit of the cavern.";
             string validCommandsMessage = "move north, move south, move west, move east, enable fountain, exit, help";
+            string monsterExplanation = "Be aware of the following creatures in the cavern:";
+            string pitExplanation = "- Pits: If you enter a room with a pit, you will fall and die.";
+            string maelstromExplanation = "- Maelstroms: If you hear their growling, they are nearby. They can teleport you to a new location.";
+            string amarokExplanation = "- Amaroks: You can smell their rotten stench in nearby rooms. They are dangerous creatures.";
 
             Display(helpMessage, MessageType.Descritive);
             Display("The commands you can enter:", MessageType.Descritive);
             Display(validCommandsMessage, MessageType.Descritive);
+            Display(monsterExplanation, MessageType.Descritive);
+            Display(pitExplanation, MessageType.Descritive);
+            Display(maelstromExplanation, MessageType.Descritive);
+            Display(amarokExplanation, MessageType.Descritive);
         }
+
 
         public static void PitNearby() =>
             Display("You feel a draft. There is a pit in a nearby room.", MessageType.Narrative);
@@ -55,7 +64,13 @@ namespace MessageSystem
             Display("You hear the growling and groaning of a maelstrom nearby.", MessageType.Narrative);
 
         public static void AttackedByMaelstroms() =>
-            Display("You have been attacked by a maelstrom and have been teleported to a new location.", MessageType.Alert);
+            Display("You have been attacked by a Maelstrom and have been teleported to a new location.", MessageType.Alert);
+
+        public static void AmarokNearby() =>
+            Display("You can smell the rotten stench of an Amarok in a nearby room.", MessageType.Narrative);
+
+        public static void AttackedByAmarok() =>
+            Display("You have been attacked by a Amarok", MessageType.Alert);
 
 
         static ConsoleColor GetColor(MessageType type)

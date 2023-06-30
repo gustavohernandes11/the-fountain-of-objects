@@ -10,6 +10,9 @@ public class MediumBoard : Board
         AddEntityAt(GameEntity.Pit, new Point(3, 4));
 
         AddEntityAt(GameEntity.Maelstroms, new Point(4, 3));
+
+        AddEntityAt(GameEntity.Amarok, new Point(0, 5));
+        AddEntityAt(GameEntity.Amarok, new Point(3, 0));
     }
 }
 

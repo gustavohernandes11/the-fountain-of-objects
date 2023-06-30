@@ -126,6 +126,16 @@ class GameManager
             return;
         }
 
+        if (Board.HasEntityAt(GameEntity.Amarok, Board.PlayerPosition))
+        {
+            Message.AttackedByAmarok();
+            ShouldGameStillRun = false;
+            return;
+        }
+
+        if (Board.HasEntityAdjacent(GameEntity.Amarok, Board.PlayerPosition))
+            Message.AmarokNearby();
+
         if (Board.HasEntityAdjacent(GameEntity.Maelstroms, Board.PlayerPosition))
             Message.MaelstromsNearby();
 

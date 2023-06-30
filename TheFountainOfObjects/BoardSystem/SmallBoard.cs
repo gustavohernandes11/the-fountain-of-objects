@@ -8,6 +8,7 @@ public class SmallBoard : Board
         FountainPosition = new(0, 2);
         AddEntityAt(GameEntity.Pit, new Point(1, 2));
         AddEntityAt(GameEntity.Maelstroms, new Point(2, 3));
+        AddEntityAt(GameEntity.Amarok, new Point(3, 0));
     }
 }
 
