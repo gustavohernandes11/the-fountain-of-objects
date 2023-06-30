@@ -3,7 +3,6 @@ namespace TheFountainOfObjectsTests;
 
 public class BoardTests
 {
-
     [Fact]
     public void HasEntityAt_ReturnFalseWhenNot()
     {
@@ -23,6 +22,7 @@ public class BoardTests
 
         Assert.True(result);
     }
+
     [Fact]
     public void AddEntityAt_ShouldAddProperly()
     {
@@ -35,6 +35,7 @@ public class BoardTests
         Assert.False(beforeAdd);
         Assert.True(afterAdd);
     }
+
     [Fact]
     public void AddEntityAt_ShouldNotAffectOtherPoints()
     {
@@ -52,4 +53,34 @@ public class BoardTests
         Assert.False(anotherPlace);
     }
 
+    [Fact]
+    public void IsEmpty_ShouldReturnTrueWhenEmpty()
+    {
+        SmallBoard board = new SmallBoard();
+
+        bool result = board.IsEmpty(new(0, 0));
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsEmpty_ShouldReturnFalseWhenNot()
+    {
+        SmallBoard board = new SmallBoard();
+
+        Point pointRandom1 = new(0, 1);
+        Point pointRandom2 = new(3, 1);
+        Point pointRandom3 = new(1, 2);
+
+        board.AddEntityAt(GameEntity.Amarok, pointRandom1);
+        board.AddEntityAt(GameEntity.Amarok, pointRandom2);
+        board.AddEntityAt(GameEntity.Amarok, pointRandom3);
+
+        bool result1 = board.IsEmpty(pointRandom1);
+        bool result2 = board.IsEmpty(pointRandom2);
+        bool result3 = board.IsEmpty(pointRandom3);
+
+        Assert.False(result1);
+        Assert.False(result2);
+        Assert.False(result3);
+    }
 }
