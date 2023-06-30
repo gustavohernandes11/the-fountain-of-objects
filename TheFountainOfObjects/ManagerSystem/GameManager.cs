@@ -20,6 +20,7 @@ class GameManager
     public void Init()
     {
         int round = 0;
+        Console.Clear();
         Message.Intro();
 
         while (ShouldGameStillRun)
