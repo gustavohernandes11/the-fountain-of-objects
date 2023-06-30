@@ -21,17 +21,18 @@ class GameManager
     {
         int round = 0;
         Message.Intro();
+
         while (ShouldGameStillRun)
         {
             Message.Divisor();
             VerifyGameState();
             if (!ShouldGameStillRun) break;
             Board.DisplayBoard();
-            DisplayPlayerPosition();
+            DisplayPlayerStatus();
             Command command = Helper.GetPrompt("What do you want to do?");
+            Console.Clear();
             HandlePromptCommand(command);
             if (command == Command.Help) continue;
-            if (round > 0) Console.Clear();
             round++;
         }
     }
@@ -39,6 +40,7 @@ class GameManager
     private void HandlePromptCommand(Command command)
     {
         Point destiny;
+        Point target;
 
         switch (command)
         {
@@ -99,6 +101,27 @@ class GameManager
                     Message.EdgeOfCavern();
 
                 break;
+
+            case Command.ShootNorth:
+                target = new(Board.PlayerPosition.X, Board.PlayerPosition.Y + 1);
+                ShootArrowAt(target);
+
+                break;
+
+            case Command.ShootSouth:
+                target = new(Board.PlayerPosition.X, Board.PlayerPosition.Y - 1);
+                ShootArrowAt(target);
+                break;
+
+            case Command.ShootWest:
+                target = new(Board.PlayerPosition.X - 1, Board.PlayerPosition.Y);
+                ShootArrowAt(target);
+                break;
+
+            case Command.ShootEast:
+                target = new(Board.PlayerPosition.X + 1, Board.PlayerPosition.Y);
+                ShootArrowAt(target);
+                break;
         }
     }
 
@@ -113,6 +136,7 @@ class GameManager
             ShouldGameStillRun = false;
             return;
         }
+
         if (Board.HasEntityAt(GameEntity.Maelstroms, Board.PlayerPosition))
         {
             Message.AttackedByMaelstroms();
@@ -122,6 +146,7 @@ class GameManager
             Board.MovePlayerTo(
                 new Point(Board.PlayerPosition.X - 2, Board.PlayerPosition.Y - 1));
         }
+
         if (Board.HasEntityAt(GameEntity.Pit, Board.PlayerPosition))
         {
             Message.FellIntoPit();
@@ -152,9 +177,30 @@ class GameManager
             Message.EntranceOfCavern();
     }
 
-    private void DisplayPlayerPosition()
+    private void DisplayPlayerStatus()
     {
-        Message.Display($"You are in the room at (Row={Board.PlayerPosition.X}, Column={Board.PlayerPosition.Y}).", MessageType.Descritive);
+        Message.Display($"You are in the room at (Row={Board.PlayerPosition.X}, Column={Board.PlayerPosition.Y}) | Arrows: {Board.ArrowsAmount}", MessageType.Descritive);
+    }
+
+    private void ShootArrowAt(Point target)
+    {
+        if (!Board.IsValidPoint(target)) return;
+
+        if (Board.IsEmpty(target))
+        {
+            Message.Miss();
+        }
+        else if (Board.HasEntityAt(GameEntity.Amarok, target))
+        {
+            Message.KilledAmarok();
+            Board.RemoveEntityAt(GameEntity.Amarok, target);
+        }
+        else if (Board.HasEntityAt(GameEntity.Maelstroms, target))
+        {
+            Message.KilledMaelstrom();
+            Board.RemoveEntityAt(GameEntity.Maelstroms, target);
+        }
+        Board.ArrowsAmount--;
     }
 
 }

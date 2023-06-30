@@ -73,6 +73,18 @@ namespace MessageSystem
         public static void AttackedByAmarok() =>
             Display("You have been attacked by a Amarok", MessageType.Alert);
 
+        public static void Miss() =>
+            Display("No different sound, his arrow apparently didn't hit anything...", MessageType.Narrative);
+
+        public static void KilledAmarok() =>
+            Display("A terrible sound comes from the direction you shot, you've killed an Amarok.", MessageType.Narrative);
+
+        public static void KilledMaelstrom() =>
+            Display("A cry of despair echoes in the cave. You killed a Maelstrom.", MessageType.Narrative);
+
+        public static void NoArrows() =>
+            Display("You have no more arrows.", MessageType.Descritive);
+
 
         static ConsoleColor GetColor(MessageType type)
         {

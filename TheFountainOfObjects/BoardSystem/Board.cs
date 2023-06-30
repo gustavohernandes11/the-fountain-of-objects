@@ -6,6 +6,7 @@ public abstract class Board
     public bool IsEnabledFountain { get; set; }
     Size Size { get; set; }
     int Dimension { get; set; }
+    public int ArrowsAmount { get; set; }
     public Point PlayerPosition { get; set; }
     public abstract Point FountainPosition { get; set; }
 
@@ -24,6 +25,7 @@ public abstract class Board
         PlayerPosition = new Point(0, 0);
         FountainPosition = new(0, 2);
         IsEnabledFountain = false;
+        ArrowsAmount = 5;
         Size = size;
         Dimension = dimentionsPerSize[Size];
 
@@ -72,7 +74,7 @@ public abstract class Board
     public void DisplayBoardWithTraps()
     {
         string room = "■ ";
-        string highlightedRoom = "_ ";
+        string playersRoom = "_ ";
         string[] rows = new string[Dimension];
 
         for (int i = 0; i < Dimension; i++)
@@ -82,7 +84,7 @@ public abstract class Board
                 Point thisPosition = new Point(j, i);
                 if (PlayerPosition == thisPosition)
                 {
-                    rows[i] += highlightedRoom;
+                    rows[i] += playersRoom;
                 }
                 else if (HasEntityAt(GameEntity.Pit, thisPosition))
                 {
@@ -141,6 +143,17 @@ public abstract class Board
         }
     }
 
+    public void RemoveEntityAt(GameEntity entity, Point point)
+    {
+        if (IsValidPoint(point))
+        {
+            if (HasEntityAt(entity, point))
+            {
+                Content[point].Remove(entity);
+            }
+        }
+    }
+
     public bool HasEntityAdjacent(GameEntity entity, Point point)
     {
         if (
@@ -160,7 +173,8 @@ public abstract class Board
     }
 
     public bool IsEmpty(Point point) =>
-        IsValidPoint(point) && Content[point].Count > 0;
+        !Content[point].Any();
+
 
     public void Set(GameEntity entity, Point point)
     {
@@ -186,6 +200,7 @@ public abstract class Board
         Content[initial].Remove(entity);
         AddEntityAt(entity, destiny);
     }
+
     public void MovePlayerTo(Point point)
     {
         if (IsValidPoint(point))
@@ -198,6 +213,7 @@ public abstract class Board
             PlayerPosition = point;
         }
     }
+
     Point AdjustPoint(Point point)
     {
         if (point.X > Dimension - 1)
