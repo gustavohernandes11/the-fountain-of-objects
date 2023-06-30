@@ -19,17 +19,20 @@ class GameManager
 
     public void Init()
     {
+        int round = 0;
         Message.Intro();
         while (ShouldGameStillRun)
         {
-            Console.Clear();
             Message.Divisor();
             VerifyGameState();
+            if (!ShouldGameStillRun) break;
             Board.DisplayBoard();
             DisplayPlayerPosition();
             Command command = Helper.GetPrompt("What do you want to do?");
             HandlePromptCommand(command);
             if (command == Command.Help) continue;
+            if (round > 0) Console.Clear();
+            round++;
         }
     }
 

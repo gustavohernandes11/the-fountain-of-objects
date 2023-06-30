@@ -31,7 +31,8 @@ namespace MessageSystem
 
         public static void Intro()
         {
-            Display("The cavern is a grid of rooms, and no natural or human-made light works within due to unnatural darkness. You can see nothing, but you can hear and smell your way through the caverns to find the Fountain of Objects, restore it, and escape to the exit.", MessageType.Narrative);
+            Display("You enter the Cavern of Objects, a maze of rooms filled with dangerous pits in search of the Fountain of Objects.", MessageType.Narrative);
+            Display("Light is visible only in the entrance, and no other light is seen anywhere in the caverns. You must navigate the Caverns with your other senses. Find the Fountain of Objects, activate it, and return to the entrance.", MessageType.Narrative);
             Display("You can type 'help' if you don't know what to do. Insert 'exit' to leave the game.", MessageType.Descritive);
         }
 
@@ -42,7 +43,7 @@ namespace MessageSystem
             string monsterExplanation = "Be aware of the following creatures in the cavern:";
             string pitExplanation = "- Pits: If you enter a room with a pit, you will fall and die.";
             string maelstromExplanation = "- Maelstroms: If you hear their growling, they are nearby. They can teleport you to a new location.";
-            string amarokExplanation = "- Amaroks: You can smell their rotten stench in nearby rooms. They are dangerous creatures.";
+            string amarokExplanation = "- Amaroks: You can smell them rotten in the nearby rooms. They are dangerous creatures and will kill you if they find you.";
 
             Display(helpMessage, MessageType.Descritive);
             Display("The commands you can enter:", MessageType.Descritive);

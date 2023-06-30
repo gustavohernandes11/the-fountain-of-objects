@@ -37,22 +37,68 @@ public abstract class Board
                 Content.Add(new Point(i, j), emptyEntityList);
             }
         }
-
     }
 
     public void DisplayBoard()
     {
         string room = "■ ";
-        string highlightedRoom = "P ";
+        string highlightedRoom = "_ ";
         string[] rows = new string[Dimension];
 
         for (int i = 0; i < Dimension; i++)
         {
             for (int j = 0; j < Dimension; j++)
             {
-                if (PlayerPosition.X == j && PlayerPosition.Y == i)
+                Point thisPosition = new Point(j, i);
+                if (PlayerPosition == thisPosition)
                 {
                     rows[i] += highlightedRoom;
+                }
+                else
+                {
+                    rows[i] += room;
+                }
+            }
+        }
+        Array.Reverse(rows);
+        Console.WriteLine("");
+        foreach (var row in rows)
+        {
+            Console.WriteLine(row);
+        }
+        Console.WriteLine("");
+    }
+
+    public void DisplayBoardWithTraps()
+    {
+        string room = "■ ";
+        string highlightedRoom = "_ ";
+        string[] rows = new string[Dimension];
+
+        for (int i = 0; i < Dimension; i++)
+        {
+            for (int j = 0; j < Dimension; j++)
+            {
+                Point thisPosition = new Point(j, i);
+                if (PlayerPosition == thisPosition)
+                {
+                    rows[i] += highlightedRoom;
+                }
+                else if (HasEntityAt(GameEntity.Pit, thisPosition))
+                {
+                    rows[i] += "P ";
+                }
+                else if (FountainPosition == thisPosition)
+                {
+                    rows[i] += "* ";
+                }
+                else if (HasEntityAt(GameEntity.Amarok, thisPosition))
+                {
+                    rows[i] += "A ";
+                }
+                else if (HasEntityAt(GameEntity.Maelstroms, thisPosition))
+                {
+                    rows[i] += "M ";
                 }
                 else
                 {
