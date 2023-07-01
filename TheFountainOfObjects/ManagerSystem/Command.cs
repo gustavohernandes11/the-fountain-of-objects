@@ -7,9 +7,9 @@ namespace BoardSystem
         public void Run(Board board);
     }
 
-    public interface IManagerCommand
+    public interface IGameStateCommand
     {
-        public void Run(GameManager manager);
+        public void Run(GameStateVerifier gameStateVerifier);
     }
 
     public class HelpCommand : ICommand
@@ -125,11 +125,11 @@ namespace BoardSystem
         }
 
     }
-    public class ExitCommand : IManagerCommand
+    public class ExitCommand : IGameStateCommand
     {
-        public void Run(GameManager manager)
+        public void Run(GameStateVerifier gameStateVerifier)
         {
-            manager.ShouldGameStillRun = false;
+            gameStateVerifier.ShouldGameStillRun = false;
         }
 
     }

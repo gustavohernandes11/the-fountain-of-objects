@@ -7,7 +7,7 @@ static class Helper
         return Enum.TryParse(typeof(TEnum), value, true, out _);
     }
 
-    public static string? GetPrompt(string text)
+    public static string GetPrompt(string text)
     {
         while (true)
         {
@@ -18,7 +18,7 @@ static class Helper
             if (!string.IsNullOrEmpty(input))
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                return input;
+                return input.Trim();
             }
 
             Console.ForegroundColor = ConsoleColor.White;

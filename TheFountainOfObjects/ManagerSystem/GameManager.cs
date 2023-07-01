@@ -4,17 +4,15 @@ using Utilities;
 
 namespace ManagerSystem;
 
-
 public class GameManager
 {
     Board Board { get; set; }
-    public bool ShouldGameStillRun { get; set; }
-
+    GameStateVerifier GameStateVerifier { get; set; }
 
     public GameManager(Board board)
     {
         Board = board;
-        ShouldGameStillRun = true;
+        GameStateVerifier = new(board);
     }
 
     public void Init()
@@ -23,22 +21,22 @@ public class GameManager
         Console.Clear();
         Message.Intro();
 
-        while (ShouldGameStillRun)
+        do
         {
             Message.Divisor();
-            VerifyGameState();
-            if (!ShouldGameStillRun) break;
+            GameStateVerifier.Verify();
+            if (!GameStateVerifier.ShouldGameStillRun) break;
             Board.DisplayBoard();
             DisplayPlayerStatus();
-            string? input = Helper.GetPrompt("What do you want to do?")!.Trim();
+            string input = Helper.GetPrompt("What do you want to do?");
             Console.Clear();
-            HandlePromptCommand(input);
-            // if (command == Command.Help) continue;
+            HandleCommand(input);
             round++;
         }
+        while (GameStateVerifier.ShouldGameStillRun);
     }
 
-    private void HandlePromptCommand(string? input)
+    private void HandleCommand(string? input)
     {
         if (input == null) return;
 
@@ -83,7 +81,7 @@ public class GameManager
                 break;
 
             case "exit":
-                ShouldGameStillRun = false;
+                GameStateVerifier.ShouldGameStillRun = false;
                 return;
 
             case "help":
@@ -96,60 +94,6 @@ public class GameManager
         }
 
         command.Run(Board);
-
-
-    }
-
-    private void VerifyGameState()
-    {
-        if (ShouldGameStillRun == false)
-            return;
-
-        if (Board.PlayerPosition == new Point(0, 0) && Board.IsEnabledFountain)
-        {
-            Message.Win();
-            ShouldGameStillRun = false;
-            return;
-        }
-
-        if (Board.HasEntityAt(GameEntity.Maelstroms, Board.PlayerPosition))
-        {
-            Message.AttackedByMaelstroms();
-            Board.MoveEntityTo(GameEntity.Maelstroms, Board.PlayerPosition,
-                new Point(Board.PlayerPosition.X + 2, Board.PlayerPosition.Y + 1));
-
-            Board.MovePlayerTo(
-                new Point(Board.PlayerPosition.X - 2, Board.PlayerPosition.Y - 1));
-        }
-
-        if (Board.HasEntityAt(GameEntity.Pit, Board.PlayerPosition))
-        {
-            Message.FellIntoPit();
-            ShouldGameStillRun = false;
-            return;
-        }
-
-        if (Board.HasEntityAt(GameEntity.Amarok, Board.PlayerPosition))
-        {
-            Message.AttackedByAmarok();
-            ShouldGameStillRun = false;
-            return;
-        }
-
-        if (Board.HasEntityAdjacent(GameEntity.Amarok, Board.PlayerPosition))
-            Message.AmarokNearby();
-
-        if (Board.HasEntityAdjacent(GameEntity.Maelstroms, Board.PlayerPosition))
-            Message.MaelstromsNearby();
-
-        if (Board.HasEntityAdjacent(GameEntity.Pit, Board.PlayerPosition))
-            Message.PitNearby();
-
-        if (Board.PlayerPosition == Board.FountainPosition && !Board.IsEnabledFountain)
-            Message.FoundFountain();
-
-        if (Board.PlayerPosition == new Point(0, 0))
-            Message.EntranceOfCavern();
     }
 
     private void DisplayPlayerStatus()
@@ -157,5 +101,4 @@ public class GameManager
         Message.Display($"You are in the room at (Row={Board.PlayerPosition.X}, Column={Board.PlayerPosition.Y}) | Arrows: {Board.ArrowsAmount}", MessageType.Descritive);
     }
 }
-
 
