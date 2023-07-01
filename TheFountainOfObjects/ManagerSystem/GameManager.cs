@@ -8,6 +8,8 @@ public class GameManager
 {
     Board Board { get; set; }
     GameStateVerifier GameStateVerifier { get; set; }
+    DateTime InitialTime { get; set; }
+    DateTime FinalTime { get; set; }
 
     public GameManager(Board board)
     {
@@ -17,6 +19,7 @@ public class GameManager
 
     public void Init()
     {
+        InitialTime = DateTime.Now;
         int round = 0;
         Console.Clear();
         Message.Intro();
@@ -34,7 +37,11 @@ public class GameManager
             round++;
         }
         while (GameStateVerifier.ShouldGameStillRun);
+
+        DisplayElapsedTime();
+
     }
+
 
     private void HandleCommand(string? input)
     {
@@ -99,6 +106,13 @@ public class GameManager
     private void DisplayPlayerStatus()
     {
         Message.Display($"You are in the room at (Row={Board.PlayerPosition.X}, Column={Board.PlayerPosition.Y}) | Arrows: {Board.ArrowsAmount}", MessageType.Descritive);
+    }
+
+    private void DisplayElapsedTime()
+    {
+        FinalTime = DateTime.Now;
+        TimeSpan elapsedTime = FinalTime - InitialTime;
+        Message.Display($"You spent {elapsedTime.Minutes}:{elapsedTime.Seconds} in the cave", MessageType.Descritive);
     }
 }
 
