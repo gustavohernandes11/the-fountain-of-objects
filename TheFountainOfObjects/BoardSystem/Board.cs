@@ -6,30 +6,20 @@ namespace BoardSystem;
 public abstract class Board
 {
     public bool IsEnabledFountain { get; set; }
-    Size Size { get; set; }
-    int Dimension { get; set; }
     public int ArrowsAmount { get; set; }
     public Point PlayerPosition { get; set; }
+    public abstract int Dimension { get; set; }
     public abstract Point FountainPosition { get; set; }
 
     Dictionary<Point, List<GameEntity>> Content { get; set; }
-    readonly Dictionary<Size, int> dimentionsPerSize = new()
-        {
-            { Size.Small, 4 },
-            { Size.Medium, 6 },
-            { Size.Large, 8 }
-        };
 
-
-
-    public Board(Size size)
+    public Board(int size = 4)
     {
         PlayerPosition = new Point(0, 0);
         FountainPosition = new(0, 2);
         IsEnabledFountain = false;
         ArrowsAmount = 5;
-        Size = size;
-        Dimension = dimentionsPerSize[Size];
+        Dimension = size;
 
         Content = new Dictionary<Point, List<GameEntity>>();
 
@@ -110,7 +100,9 @@ public abstract class Board
                 }
             }
         }
+        // adjust for proper player view
         Array.Reverse(rows);
+
         Console.WriteLine("");
         foreach (var row in rows)
         {
