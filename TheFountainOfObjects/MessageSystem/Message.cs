@@ -83,7 +83,7 @@ namespace MessageSystem
         public static void KilledMaelstrom() =>
             Display("A cry of despair echoes in the cave. You killed a Maelstrom.", MessageType.Narrative);
 
-        public static void NoArrows() =>
+        public static void OutOfAmmo() =>
             Display("You have no more arrows.", MessageType.Descritive);
 
 

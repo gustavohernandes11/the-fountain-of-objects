@@ -186,6 +186,11 @@ class GameManager
     private void ShootArrowAt(Point target)
     {
         if (!Board.IsValidPoint(target)) return;
+        if (Board.ArrowsAmount)
+        {
+            Message.OutOfAmmo();
+            return;
+        }
 
         if (Board.IsEmpty(target))
         {
