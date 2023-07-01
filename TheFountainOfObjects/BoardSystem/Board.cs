@@ -1,3 +1,5 @@
+using MessageSystem;
+
 namespace BoardSystem;
 
 
@@ -234,6 +236,31 @@ public abstract class Board
             point = new Point(point.X, point.Y + Dimension);
         };
         return point;
+    }
+    public void ShootArrowAt(Point target)
+    {
+        if (!IsValidPoint(target)) return;
+        if (ArrowsAmount <= 0)
+        {
+            Message.OutOfAmmo();
+            return;
+        }
+
+        if (IsEmpty(target))
+        {
+            Message.Miss();
+        }
+        else if (HasEntityAt(GameEntity.Amarok, target))
+        {
+            Message.KilledAmarok();
+            RemoveEntityAt(GameEntity.Amarok, target);
+        }
+        else if (HasEntityAt(GameEntity.Maelstroms, target))
+        {
+            Message.KilledMaelstrom();
+            RemoveEntityAt(GameEntity.Maelstroms, target);
+        }
+        ArrowsAmount--;
     }
 }
 

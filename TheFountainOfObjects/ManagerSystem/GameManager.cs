@@ -5,10 +5,10 @@ using Utilities;
 namespace ManagerSystem;
 
 
-class GameManager
+public class GameManager
 {
     Board Board { get; set; }
-    bool ShouldGameStillRun { get; set; }
+    public bool ShouldGameStillRun { get; set; }
 
 
     public GameManager(Board board)
@@ -30,100 +30,74 @@ class GameManager
             if (!ShouldGameStillRun) break;
             Board.DisplayBoard();
             DisplayPlayerStatus();
-            Command command = Helper.GetPrompt("What do you want to do?");
+            string? input = Helper.GetPrompt("What do you want to do?")!.Trim();
             Console.Clear();
-            HandlePromptCommand(command);
-            if (command == Command.Help) continue;
+            HandlePromptCommand(input);
+            // if (command == Command.Help) continue;
             round++;
         }
     }
 
-    private void HandlePromptCommand(Command command)
+    private void HandlePromptCommand(string? input)
     {
-        Point destiny;
-        Point target;
+        if (input == null) return;
 
-        switch (command)
+        ICommand command;
+
+        switch (input)
         {
-            case Command.Help:
-                Message.Help();
+            case "move north":
+                command = new MoveNorthCommand();
                 break;
 
-            case Command.Exit:
+            case "move south":
+                command = new MoveSouthCommand();
+                break;
+
+            case "move west":
+                command = new MoveWestCommand();
+                break;
+
+            case "move east":
+                command = new MoveEastCommand();
+                break;
+
+            case "shoot north":
+                command = new ShootNorthCommand();
+                break;
+
+            case "shoot south":
+                command = new ShootSouthCommand();
+                break;
+
+            case "shoot west":
+                command = new ShootWestCommand();
+                break;
+
+            case "shoot east":
+                command = new ShootEastCommand();
+                break;
+
+            case "enable fountain":
+                command = new EnableFountainCommand();
+                break;
+
+            case "exit":
                 ShouldGameStillRun = false;
+                return;
+
+            case "help":
+                command = new HelpCommand();
                 break;
 
-            case Command.EnableFountain:
-                if (Board.PlayerPosition == Board.FountainPosition)
-                {
-                    Board.IsEnabledFountain = true;
-                    Message.EnabledFountain();
-                }
-                else
-                    Message.Display("You are not in the Fountain's room.", MessageType.Descritive);
-
-                break;
-
-            case Command.MoveEast:
-                destiny = new(Board.PlayerPosition.X + 1, Board.PlayerPosition.Y);
-                if (Board.IsValidPoint(destiny))
-                    Board.PlayerPosition = destiny;
-
-                else
-                    Message.EdgeOfCavern();
-                break;
-
-            case Command.MoveWest:
-                destiny = new(Board.PlayerPosition.X - 1, Board.PlayerPosition.Y);
-                if (Board.IsValidPoint(destiny))
-                    Board.PlayerPosition = destiny;
-
-                else
-                    Message.EdgeOfCavern();
-
-                break;
-
-            case Command.MoveNorth:
-                destiny = new(Board.PlayerPosition.X, Board.PlayerPosition.Y + 1);
-                if (Board.IsValidPoint(destiny))
-                    Board.PlayerPosition = destiny;
-
-                else
-                    Message.EdgeOfCavern();
-
-                break;
-
-            case Command.MoveSouth:
-                destiny = new(Board.PlayerPosition.X, Board.PlayerPosition.Y - 1);
-                if (Board.IsValidPoint(destiny))
-                    Board.PlayerPosition = destiny;
-
-                else
-                    Message.EdgeOfCavern();
-
-                break;
-
-            case Command.ShootNorth:
-                target = new(Board.PlayerPosition.X, Board.PlayerPosition.Y + 1);
-                ShootArrowAt(target);
-
-                break;
-
-            case Command.ShootSouth:
-                target = new(Board.PlayerPosition.X, Board.PlayerPosition.Y - 1);
-                ShootArrowAt(target);
-                break;
-
-            case Command.ShootWest:
-                target = new(Board.PlayerPosition.X - 1, Board.PlayerPosition.Y);
-                ShootArrowAt(target);
-                break;
-
-            case Command.ShootEast:
-                target = new(Board.PlayerPosition.X + 1, Board.PlayerPosition.Y);
-                ShootArrowAt(target);
+            default:
+                command = new InvalidCommand();
                 break;
         }
+
+        command.Run(Board);
+
+
     }
 
     private void VerifyGameState()
@@ -182,33 +156,6 @@ class GameManager
     {
         Message.Display($"You are in the room at (Row={Board.PlayerPosition.X}, Column={Board.PlayerPosition.Y}) | Arrows: {Board.ArrowsAmount}", MessageType.Descritive);
     }
-
-    private void ShootArrowAt(Point target)
-    {
-        if (!Board.IsValidPoint(target)) return;
-        if (Board.ArrowsAmount)
-        {
-            Message.OutOfAmmo();
-            return;
-        }
-
-        if (Board.IsEmpty(target))
-        {
-            Message.Miss();
-        }
-        else if (Board.HasEntityAt(GameEntity.Amarok, target))
-        {
-            Message.KilledAmarok();
-            Board.RemoveEntityAt(GameEntity.Amarok, target);
-        }
-        else if (Board.HasEntityAt(GameEntity.Maelstroms, target))
-        {
-            Message.KilledMaelstrom();
-            Board.RemoveEntityAt(GameEntity.Maelstroms, target);
-        }
-        Board.ArrowsAmount--;
-    }
-
 }
 
 

@@ -1,4 +1,4 @@
-namespace ManagerSystem;
+namespace MessageSystem;
 
 public enum MessageType
 {
